@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 添加用户-弹窗Form -->
-		<el-dialog title="添加用户" :visible.sync="dialogAddUser" :before-close="hidePanel" width="70%">
+		<el-dialog :title="action+'用户'" :visible.sync="dialogAddUser" :before-close="hidePanel" width="1000px">
 			<el-form :model="addRoleForm" :rules="rules" ref="addRoleForm">
 				<div>
 					<el-form-item label="姓名:" :label-width="formLabelWidth" prop="Name">
@@ -19,23 +19,17 @@
 						<el-input v-model="addRoleForm.Level"></el-input>
 					</el-form-item>
 					<el-form-item label="出生年月:" :label-width="formLabelWidth" prop="BrithDate">
-						 <el-date-picker
-						      v-model="addRoleForm.BrithDate"
-						      type="date"
-						      placeholder="选择日期">
-						    </el-date-picker>
+						<el-date-picker v-model="addRoleForm.BrithDate" type="date" placeholder="选择日期">
+						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="年龄:" :label-width="formLabelWidth" prop="年龄">
-						<el-input v-model="addRoleForm.年龄"></el-input>
+					<el-form-item label="年龄:" :label-width="formLabelWidth" prop="Age">
+						<el-input v-model="addRoleForm.Age"></el-input>
 					</el-form-item>
 				</div>
 				<div>
 					<el-form-item label="入伍年月:" :label-width="formLabelWidth" prop="EnlistedDate">
-						<el-date-picker
-						     v-model="addRoleForm.EnlistedDate"
-						     type="date"
-						     placeholder="选择日期">
-						   </el-date-picker>
+						<el-date-picker v-model="addRoleForm.EnlistedDate" type="date" placeholder="选择日期">
+						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="政治面貌:" :label-width="formLabelWidth" prop="PoliticalFace">
 						<el-input v-model="addRoleForm.PoliticalFace"></el-input>
@@ -93,6 +87,28 @@
 			dialogAddUser: {
 				type: Boolean,
 				default: false
+			},
+			userId: {
+				type: String,
+				default: ""
+			}
+		},
+		watch: {
+			userId(val) {
+				if (val) {
+					let data = {
+						'Guid': val
+					};
+					this.action = '修改'
+					this.$api.getUserId(data).then(res => {
+						this.addRoleForm = res;
+					}).catch(err => {
+						console.log(err);
+					})
+				}else{
+					this.action = '添加'
+					this.addRoleForm = {};
+				}
 			}
 		},
 		data() {
@@ -115,9 +131,9 @@
 					callback(new Error('输入不能为空'))
 				} else {
 					if (value !== '') {
-						var reg = /^[A-Za-z0-9\u4e00-\u9fa5]{4,18}$/
+						var reg = /^\d+$|^\d+[.]?\d+$/
 						if (!reg.test(value)) {
-							callback(new Error('角色长度为4-18位'))
+							callback(new Error('只能输入数字'))
 						}
 					}
 					callback()
@@ -126,36 +142,40 @@
 
 			return {
 				addRoleForm: { // 添加用户表单输入
-					roleName: '',
-					superiorName: '',
-					roleFlag: ''
+
 				},
 				rules: { // 添加用户验证
-					Name: [{
+					// Name: [{
+					// 	required: true,
+					// 	validator: validateRoleFlag,
+					// 	trigger: 'blur'
+					// }],
+					Age: [{
 						required: true,
 						validator: validateRoleFlag,
 						trigger: 'blur'
 					}]
 				},
 				formLabelWidth: '100px', // 添加用户输入框宽度
+				action:'添加'
 			}
 		},
 		methods: {
 			// 添加角色确定
-			addRoleSave(formName) {
-				this.$refs[formName].validate(valid => {
+			addRoleSave(addRoleForm) {
+				var that = this;
+				this.$refs[addRoleForm].validate(valid => {
 					if (valid) {
-						axiosPost('base/role/addOrUpdate', {
-							roleFlag: this.addRoleForm.roleFlag,
-							roleName: this.addRoleForm.roleName
-						}).then(result => {
-							if (result.code === 200) {
-								this.$message.success('添加成功！')
-								this.hidePanel()
-								this.$parent.roleList();
+						that.$api.saveUser(that.addRoleForm).then(res => {
+							if (res) {
+								that.$message.success(that.action+'成功！')
+								that.hidePanel()
+								that.$parent.roleList();
 							} else {
-								this.$message.warning(result.message)
+								that.$message.warning(that.action+'失败')
 							}
+						}).catch(err => {
+							console.log(err);
 						})
 					}
 				})
@@ -171,9 +191,11 @@
 	.el-dialog__body {
 		padding: 20px 30px;
 	}
-	.el-input{
-		width:190px;
+
+	.el-input {
+		width: 200px !important;
 	}
+
 	.ment-input {
 		width: 150px;
 		height: 30px;
