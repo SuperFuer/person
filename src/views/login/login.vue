@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import { axiosPost, axiosGet } from '@/api/index.js'
+import router from '../../router/index'
 export default {
   data () {
     return {
@@ -101,45 +101,30 @@ export default {
           //   text: '正在登录，请稍后...',
           //   background: 'rgba(0, 0, 0, 0.7)'
           // });
-          axiosPost('auth/login', {
-            username: this.form.username,
+		  var data = {
+            userName: this.form.username,
             password: this.form.password,
-            showLoading: true,
-            loginFlag: 'login'
-          }).then(result => {
-            if (result.code === 200) {
-              // 菜单接口 vuex
-              this.$store.dispatch('getMenus')
-              axiosGet('base/user/getUser', { showLoading: true, loginFlag: 'login' }).then(result => {
-                // 本地存储用户信息
-                localStorage.setItem('user', JSON.stringify(result.data))
-                localStorage.setItem('reloadNums', '0')
-                console.log(result.data)
-                // loading.close()
-              })
-
-              this.isTips = false
-              // 本地存储用户名
-              // localStorage.setItem('user', JSON.stringify(result.data.userName))
-              // 本地存储token
-              localStorage.setItem('token', result.data.token)
-              // 本地存储
-              localStorage.setItem('firstLogin', JSON.stringify(result.data.firstLogin))
-              // if (result.data.firstLogin === false) {
-              //   console.log('a')
-              //   this.$router.push({ path: '/changePassword' })
-              // }
-              // 权限接口
-              // axiosGet('base/api/getAuthorities').then(res => {
-              //   console.log(res)
-              // })
-              // loading.close()
-            } else {
-              this.isTips = true
-              // this.$message(result.message)
-              // loading.close()
-            }
-          })
+		  }
+		this.$api.getToken(data).then(res => {
+			if(res){
+				var data = {
+				    token:res
+				  }
+				localStorage.setItem('token', res);
+				this.$api.getUserInfo(data).then(res => {
+					if(res){
+						localStorage.setItem('user', JSON.stringify(res));
+						router.push('/index');
+					}
+				}).catch(err => {
+					console.log(err);
+				})
+			}else{
+				this.$message.warning('用户名密码错误！')
+			}
+		}).catch(err => {
+			console.log(err);
+		})
         }
       })
     }

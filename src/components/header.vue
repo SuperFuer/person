@@ -3,10 +3,10 @@
 		<div class="top-login">
 			<div class="headLeft">
 				<h1 class="logo">
-					<!-- <img src="@/assets/images/logo.png" alt=""> -->
+					<img src="@/assets/images/logo.png" alt="">
 				</h1>
 				<el-menu :default-active="activeIndex" class="el-menu-demo header-menu" mode="horizontal">
-					<el-menu-item :index="''+ ++index" v-for="(item,index) in sortMenus" :key="index" @click="toPath(item.apiUrl)">
+					<el-menu-item :index="''+ ++index" v-for="(item,index) in headerMenus" :key="index" @click="toPath(item.apiUrl)">
 						{{item.name}}
 					</el-menu-item>
 				</el-menu>
@@ -14,7 +14,7 @@
 			<ul class="operation">
 				<li>
 					<img src="@/assets/images/head-img.png" alt="" class="pic">
-					欢迎,
+					欢迎,{{user.UserName}}
 				</li>
 				<li class="line"></li>
 				<!-- <li>
@@ -50,23 +50,16 @@
 					cssClass: "el-icon-notebook-2",
 					id: "ASSET1E0-0002-0001-0001-000100000000",
 					isMenu: false,
-					isMobile: 0,
-					level_num: null,
-					mobileUrl: "/#/ysEntrance",
 					name: "用户管理",
 					parentId: "ASSET1E0-0002-0001-0001-000000000000",
 					sortNum: 1,
 					status: 1
 				}, {
-					apiUrl: "jsadmin",
+					apiUrl: "source",
 					childMenu: [],
 					createTime: "2019-07-10T15:15:57",
 					cssClass: "el-icon-notebook-2",
 					id: "ASSET1E0-0002-0001-0001-000100000000",
-					isMenu: false,
-					isMobile: 0,
-					level_num: null,
-					mobileUrl: "/#/ysEntrance",
 					name: "成绩管理",
 					parentId: "ASSET1E0-0002-0001-0001-000000000000",
 					sortNum: 1,
@@ -74,61 +67,12 @@
 				}],
 				activeIndex: '1',
 				username: null,
-				dialogVisible: false
-			}
-		},
-		computed: {
-			sortMenus: function() {
-				if (this.headerMenus) {
-					return sortByKey(this.headerMenus, 'id')
-				}
+				dialogVisible: false,
+				user:{}
 			}
 		},
 		created() {
-			//this.headerMenus = this.$store.state.menus.data
-			//this.user = JSON.parse(localStorage.getItem('user'))
-			// 根据菜单显示导航当前位置
-			// let menus = this.$store.state.menus.data
-			// let path = this.$route.path.split('?')
-			// let reloadNum = localStorage.getItem('reloadNum')
-			// let reloadNums = localStorage.getItem('reloadNums')
-			// if (this.$route.path == '/task') {
-			//   if (reloadNum <= 0 && reloadNums <= 0) {
-			//     this.$nextTick(function () {
-			//       location.reload()
-			//     })
-			//     localStorage.setItem('reloadNum', '1')
-			//     localStorage.setItem('reloadNums', '1')
-			//   }
-			// setTimeout(function () {
-			//   if (reloadNum <= 0 && reloadNums <= 0) {
-			//     localStorage.setItem('reloadNum', '1')
-			//     localStorage.setItem('reloadNums', '1')
-			//     location.reload()
-			//   }else{
-			//     this.$router.push({ path: '/login' })
-			//   }
-			// }, 0)
-			// }
-			// if (menus) {
-			//   menus.forEach((item, index) => {
-			//     if (item.childMenu) {
-			//       item.childMenu.forEach(v2 => {
-			//         if (v2.childMenu) {
-			//           v2.childMenu.forEach(v3 => {
-			//             if (v3.childMenu) {
-			//               // v3.childMenu.forEach(v4 => {
-			//               if ('/' + item.apiUrl === this.$route.path || '/' + v2.apiUrl === this.$route.path || '/' + v3.apiUrl === this.$route.path) {
-			//                 this.activeIndex = index + 1 + ''
-			//               }
-			//               // })
-			//             }
-			//           })
-			//         }
-			//       })
-			//     }
-			//   })
-			// }
+			this.user = JSON.parse(localStorage.getItem('user'));
 		},
 		methods: {
 			loginout() {
@@ -155,42 +99,8 @@
 				this.dialogVisible = false
 			}
 		},
-		watch: {
-			// '$route.path': function (newVal) {
-			//   let menus = this.$store.state.menus.data
-			//   if (menus) {
-			//     menus.forEach((item, index) => {
-			//       if (item.childMenu) {
-			//         item.childMenu.forEach(v2 => {
-			//           if (v2.childMenu) {
-			//             v2.childMenu.forEach(v3 => {
-			//               if (v3.childMenu) {
-			//                 // v3.childMenu.forEach(v4 => {
-			//                 if ('/' + item.apiUrl === this.$route.path || '/' + v2.apiUrl === this.$route.path || '/' + v3.apiUrl === this.$route.path) {
-			//                   this.activeIndex = index + 1 + ''
-			//                   // console.log(this.activeIndex)
-			//                 }
-			//                 // })
-			//               }
-			//             })
-			//           }
-			//         })
-			//       }
-			//     })
-			//   }
-			// }
-		}
 	}
 
-	// 菜单排序
-	function sortByKey(array, key) {
-		return array.sort(function(a, b) {
-			var x = a[key]
-			var y = b[key]
-
-			return ((x < y) ? -1 : (x > y) ? 1 : 0)
-		})
-	}
 </script>
 
 <style lang="scss">

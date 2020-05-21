@@ -55,7 +55,7 @@
         </el-table-column> -->
 			<el-table-column prop="Name" label="姓名" sortable>
 			</el-table-column>
-			<el-table-column prop="Company" label="公司" sortable>
+			<el-table-column prop="Company" label="公司" sortable width="120">
 			</el-table-column>
 			<el-table-column prop="Department" label="单位" sortable>
 			</el-table-column>

@@ -78,10 +78,6 @@
 	</div>
 </template>
 <script>
-	import {
-		axiosPost,
-		axiosGet
-	} from '@/api/index.js'
 	export default {
 		props: { // 弹窗显示
 			dialogAddUser: {

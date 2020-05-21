@@ -22,7 +22,8 @@
 // import { getmenus } from '@/api/index.js'
 import aside from "@/components/aside.vue";
 import header from "@/components/header.vue";
-import jsadmin from "@/views/jurisdiction/qxset/jsadmin.vue";
+// import jsadmin from "@/views/jurisdiction/qxset/jsadmin.vue";
+ import jsadmin from '@/views/source/source.vue';
 export default {
   data() {
     return {
@@ -38,28 +39,8 @@ export default {
     jsadmin: jsadmin
   },
   methods: {
-    isNoYesLoad: function (){
-      this.isNew = false;
-      this.$nextTick(() => {         // 重新获取审批历史组件 => 做到实时刷新
-        this.isNew = true;
-      });
-    },
-    // openAside() {}
-    //   leftmenus(){
-    //       getmenus().then(result => {
-    //         // console.log(result)
-    //         this.menuList = result.data.data
-    //         // result.data.data.forEach(item => {
-    //         //     console.log(item.path)
-    //         //     item.children.forEach(v => {
-    //         //         console.log(v.path)
-    //         //     })
-    //         // });
-    //       })
-    //   }
   },
   created () {
-    //this.isNoYesLoad()
   }
 };
 </script>

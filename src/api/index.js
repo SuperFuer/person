@@ -19,6 +19,20 @@ import {
 import request from '@/axios/request'
 let Intranet = `/api`;
 const api = {
+	getToken(data) {
+		return request({
+			url: `${Intranet}/sso/GetToken`,
+			method: 'get',
+			params: data
+		})
+	},
+	getUserInfo(data) {
+		return request({
+			url: `${Intranet}/sso/GetUserInfoByToken`,
+			method: 'get',
+			params: data
+		})
+	},
 	userList(data) {
 		return request({
 			url: `${Intranet}/Personalfiles/GetPersonalList`,
@@ -37,6 +51,34 @@ const api = {
 		return request({
 			url: `${Intranet}/Personalfiles/Save`,
 			method: 'post',
+			params: data
+		})
+	},
+	getSubject(data) {
+		return request({
+			url: `${Intranet}/dicsubject/GetAll`,
+			method: 'get',
+			params: data
+		})
+	},
+	getSubjectType(data) {
+		return request({
+			url: `${Intranet}/dicsubject/GetDicSubject`,
+			method: 'get',
+			params: data
+		})
+	},
+	saveSource(data) {
+		return request({
+			url: `${Intranet}/Personalscroce/Save`,
+			method: 'post',
+			params: data
+		})
+	},
+	getScroces(data) {
+		return request({
+			url: `${Intranet}/Personalscroce/GetScroces`,
+			method: 'get',
 			params: data
 		})
 	},
